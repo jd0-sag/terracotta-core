@@ -92,8 +92,11 @@ public class TCConnectionManagerImpl implements TCConnectionManager {
     this.socketParams.applyServerSocketParams(serverSocket, reuseAddr);
 
     try {
+      System.err.println("ZZZZZ BIND: address " + addr.getAddress() + " port " + addr.getPort() + " backlog " + backlog);
       serverSocket.bind(new InetSocketAddress(addr.getAddress(), addr.getPort()), backlog);
+      System.err.println("ZZZZZ BIND SUCCESS");
     } catch (IOException ioe) {
+      System.err.println("ZZZZZ BIND FAIL");
       logger.warn("Unable to bind socket on address " + addr.getAddress() + ", port " + addr.getPort() + ", "
                   + ioe.getMessage());
       throw ioe;

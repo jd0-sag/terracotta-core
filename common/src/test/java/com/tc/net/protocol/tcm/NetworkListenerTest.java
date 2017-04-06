@@ -59,18 +59,22 @@ public class NetworkListenerTest extends TestCase {
   }
 
   public void testBindException() throws Exception {
+    System.err.println("ZZZZZ testBindException() START");
     assertTrue(commsMgr.getAllListeners().length == 0);
 
     ConnectionIDFactory cidf = new DefaultConnectionIdFactory();
     NetworkListener lsnr = commsMgr.createListener(new TCSocketAddress(0), true, cidf);
 
+    System.err.println("ZZZZZ testBindException() start first listener");
     try {
       lsnr.start(Collections.<ClientID>emptySet());
     } catch (IOException ioe) {
       fail(ioe.getMessage());
     }
 
-    NetworkListener lsnr2 = commsMgr.createListener(new TCSocketAddress(lsnr.getBindPort()), true, cidf);
+    int bindPort = lsnr.getBindPort();
+    System.err.println("ZZZZZ testBindException() start second listener on port: " + bindPort);
+    NetworkListener lsnr2 = commsMgr.createListener(new TCSocketAddress(bindPort), true, cidf);
     try {
       lsnr2.start(Collections.<ClientID>emptySet());
       fail();
@@ -83,6 +87,7 @@ public class NetworkListenerTest extends TestCase {
     lsnr.stop(5000);
 
     assertTrue(commsMgr.getAllListeners().length == 0);
+    System.err.println("ZZZZZ testBindException() DONE");
   }
 
   public void testMany() throws UnknownHostException, TCTimeoutException {
